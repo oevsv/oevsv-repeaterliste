@@ -149,7 +149,7 @@
     />
     <div>
       <h2>Repeater Liste</h2>
-      <p class="info">Entwicklung: OE3ANC</p>
+      <p class="info">Entwicklung: <a href="https://github.com/OE3ANC/oevsv-repeaterliste">OE3ANC</a></p>
       <p class="info">Daten: <a href="https://repeater.oevsv.at/">OEVSV</a></p>
     </div>
     
