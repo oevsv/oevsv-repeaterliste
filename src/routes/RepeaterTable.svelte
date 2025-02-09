@@ -29,7 +29,7 @@
   let filteredRepeaters = $state<Repeater[]>([]);
   let searchQuery = $state('');
   let selectedType = $state('Alle');
-  let selectedModes = $state<string[]>([]);
+  let selectedModes = $state<string[]>(['Alle']);
   let sortField = $state('callsign');
   let sortDirection = $state(1);
   let stationTypes = $state<string[]>(['all']);
@@ -38,14 +38,14 @@
   // German translations for station types
   const typeTranslations = {
     'all': 'Alle',
-    'repeater_voice': 'Sprechfunk Umsetzer',
-    'repeater_digital': 'Digital Umsetzer',
-    'beacon': 'Bake',
-    'digipeater': 'Digipeater'
+    'repeater_voice': 'Sprechfunk',
+    'beacon': 'Baken',
+    'digipeater': 'Digipeater',
+    'atv': 'ATV'
   };
 
   // Add status to state declarations
-  let selectedStatus = $state('all');
+  let selectedStatus = $state('active');
 
   // Status options in German
   const statusOptions = {
@@ -66,6 +66,7 @@
   // Get all possible modes
   $effect(() => {
     availableModes = [
+      'Alle',  
       ...new Set([
         ...(repeaters.filter(r => r.fm).map(() => 'FM')),
         ...(repeaters.filter(r => r.dmr).map(() => 'DMR')),
@@ -96,6 +97,7 @@
         const matchesModes = selectedModes.length === 0 || 
           selectedModes.some(mode => {
             switch(mode) {
+              case 'Alle': return repeater;
               case 'FM': return repeater.fm;
               case 'DMR': return repeater.dmr;
               case 'C4FM': return repeater.c4fm;
@@ -145,8 +147,14 @@
       alt="ÖVSV Logo" 
       class="logo"
     />
-    <h2>Repeater Liste</h2>
+    <div>
+      <h2>Repeater Liste</h2>
+      <p class="info">Entwicklung: OE3ANC</p>
+      <p class="info">Daten: <a href="https://repeater.oevsv.at/">OEVSV</a></p>
+    </div>
+    
   </div>
+  
   <div class="filters">
     <input
       type="text"
@@ -191,6 +199,8 @@
           <th onclick={() => handleSort('band')}>Band</th>
           <th onclick={() => handleSort('frequency_tx')}>TX (MHz)</th>
           <th onclick={() => handleSort('frequency_rx')}>RX (MHz)</th>
+          <th onclick={() => handleSort('ctcss_tx')}>CTCSS TX</th>
+          <th onclick={() => handleSort('ctcss_rx')}>CTCSS RX</th>
           <th onclick={() => handleSort('site_name')}>Standort</th>
           <th>Modi</th>
         </tr>
@@ -203,6 +213,8 @@
             <td>{repeater.band}</td>
             <td>{repeater.frequency_tx}</td>
             <td>{repeater.frequency_rx}</td>
+            <td>{repeater.ctcss_tx}</td>
+            <td>{repeater.ctcss_rx}</td>
             <td>{repeater.site_name}</td>
             <td>
               {[
@@ -220,7 +232,6 @@
     </table>
   </div>
 </div>
-
 <style>
   .container {
     max-width: 1200px;
@@ -265,6 +276,14 @@
 
   .mode-select {
     min-width: 200px;
+  }
+
+  .info {
+    font-size: xx-small;
+  }
+
+  a {
+    color: #008CEA;
   }
 
   .export-btn {
