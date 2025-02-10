@@ -1,7 +1,7 @@
 
 <!-- App.svelte -->
 <script>
-  import RepeaterTable from './RepeaterTable.svelte';
+  import RepeaterTable from '../lib/components/RepeaterTable.svelte';
 </script>
 
 <RepeaterTable />

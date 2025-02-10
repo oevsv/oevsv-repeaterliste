@@ -1,6 +1,8 @@
 # Repeater List for OEVSV Open Data
 
-Thanks to the OEVSV for providing the repeater data!
+Using and editing data from the [VHF department of the ÖVSV umbrella organization](https://www.oevsv.at/funkbetrieb/ukw-referat/maps/), CC BY 4.0
+
+Thanks for providing the open data!
 
 ## Developing
 

@@ -28,23 +28,33 @@
   let repeaters = $state<Repeater[]>([]);
   let filteredRepeaters = $state<Repeater[]>([]);
   let searchQuery = $state('');
-  let selectedType = $state('Alle');
+  let selectedType = $state('Alle Typen');
   let selectedModes = $state<string[]>(['Alle']);
+  let selectedBands = $state<string[]>(['Alle']);
   let sortField = $state('callsign');
   let sortDirection = $state(1);
   let stationTypes = $state<string[]>(['all']);
   let availableModes = $state<string[]>([]);
+  let availableBands = $state<string[]>([]);
+
+  const fieldsToFilter = [
+    'callsign', 
+    'site_name',
+    'frequency_tx',
+    'frequency_rx',
+    'ctcss_tx',
+    'ctcss_rx'
+  ]
 
   // German translations for station types
   const typeTranslations = {
-    'all': 'Alle',
+    'all': 'Alle Typen',
     'repeater_voice': 'Sprechfunk',
     'beacon': 'Baken',
     'digipeater': 'Digipeater',
     'atv': 'ATV'
   };
 
-  // Add status to state declarations
   let selectedStatus = $state('active');
 
   // Status options in German
@@ -60,7 +70,12 @@
 
   // Get unique station types
   $effect(() => {
-    stationTypes = ['Alle', ...new Set(repeaters.map(r => r.type_of_station))];
+    stationTypes = ['Alle Typen', ...new Set(repeaters.map(r => r.type_of_station))];
+  });
+
+  // Get unique bands
+  $effect(() => {
+   availableBands = ['Alle', ...new Set(repeaters.map(r => r.band))];
   });
 
   // Get all possible modes
@@ -83,12 +98,14 @@
   $effect(() => {
     filteredRepeaters = repeaters
       .filter(repeater => {
-        const matchesSearch = Object.values(repeater)
+        const matchesSearch = 
+        Object.entries(repeater)
+        .filter(([k, v]) => fieldsToFilter.includes(k))
           .join(' ')
           .toLowerCase()
           .includes(searchQuery.toLowerCase());
 
-        const matchesType = selectedType === 'Alle' || 
+        const matchesType = selectedType === 'Alle Typen' || 
           repeater.type_of_station === selectedType;
 
         const matchesStatus = selectedStatus === 'all' || 
@@ -107,12 +124,22 @@
             }
           });
 
-        return matchesSearch && matchesType && matchesStatus && matchesModes;
+          const matchesBands = selectedBands.length === 0 || 
+          selectedBands.some(band => { 
+            switch(band) {
+              case 'Alle': return repeater;
+              default: return repeater.band === band; 
+            }
+
+          });
+
+        return matchesSearch && matchesType && matchesStatus && matchesModes && matchesBands;
       })
       .sort((a, b) => {
         return (a[sortField] > b[sortField] ? 1 : -1) * sortDirection;
       });
   });
+  
   onMount(async () => {
     try {
       const response = await fetch('https://repeater.oevsv.at/api/trx');
@@ -150,9 +177,8 @@
     <div>
       <h2>Repeater Liste</h2>
       <p class="info">Entwicklung: <a href="https://github.com/OE3ANC/oevsv-repeaterliste">OE3ANC</a></p>
-      <p class="info">Daten: <a href="https://repeater.oevsv.at/">OEVSV</a></p>
+      <p class="info">Daten: <a href="https://www.oevsv.at/funkbetrieb/ukw-referat/maps/">ÖVSV DV</a> (CC BY 4.0)</p>
     </div>
-    
   </div>
   
   <div class="filters">
@@ -163,7 +189,7 @@
       class="search-input"
     />
 
-    <select bind:value={selectedType} class="type-select">
+    <select bind:value={selectedType} class="select">
       {#each stationTypes as type}
         <option value={type}>{typeTranslations[type] || type}</option>
       {/each}
@@ -171,15 +197,25 @@
 
     <select
       multiple
+      bind:value={selectedBands}
+      class="select"
+    >
+      {#each availableBands as band}
+        <option value={band}>{band}</option>
+      {/each}
+    </select>
+
+    <select
+      multiple
       bind:value={selectedModes}
-      class="mode-select"
+      class="select"
     >
       {#each availableModes as mode}
         <option value={mode}>{mode}</option>
       {/each}
     </select>
 
-    <select bind:value={selectedStatus} class="status-select">
+    <select bind:value={selectedStatus} class="select">
       {#each Object.entries(statusOptions) as [value, label]}
         <option value={value}>{label}</option>
       {/each}
@@ -233,6 +269,7 @@
   </div>
 </div>
 <style>
+
   .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -264,18 +301,13 @@
     margin-bottom: 1rem;
   }
 
-  .search-input,
-  .type-select,
-  .mode-select {
+  .select,
+  .search-input {
     padding: 0.5rem;
     border: 1px solid #ddd;
     border-radius: 4px;
     min-width: 150px;
     flex: 1;
-  }
-
-  .mode-select {
-    min-width: 200px;
   }
 
   .info {
@@ -348,8 +380,7 @@
     }
 
     .search-input,
-    .type-select,
-    .mode-select,
+    .select,
     .export-btn {
       width: 100%;
     }
