@@ -9,6 +9,8 @@
     band: string;
     frequency_tx: number;
     frequency_rx: number;
+    ctcss_tx: number;
+    ctcss_rx: number;
     ch: string;
     ch_new: string;
     callsign: string;
