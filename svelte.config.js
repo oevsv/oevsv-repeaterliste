@@ -17,10 +17,13 @@ const config = {
 			precompress: false,
 			strict: true
 		}),
+		// For subdirs:
+		/*
 		paths: {
-			base: "/public/test",
+			base: "/list",
 			relative: false
 		}
+		*/
 	}
 };
 
