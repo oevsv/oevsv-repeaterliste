@@ -16,7 +16,11 @@ const config = {
 			fallback: 'index.html',
 			precompress: false,
 			strict: true
-		})
+		}),
+		paths: {
+			base: "/test",
+			relative: false
+		}
 	}
 };
 
