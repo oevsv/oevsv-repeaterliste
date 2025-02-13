@@ -18,7 +18,7 @@ const config = {
 			strict: true
 		}),
 		paths: {
-			base: "/test",
+			base: "/public/test",
 			relative: false
 		}
 	}
