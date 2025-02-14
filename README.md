@@ -1,6 +1,12 @@
 # Repeater List for OEVSV Open Data
 
-Using and editing data from the [VHF department of the ÖVSV umbrella organization](https://www.oevsv.at/funkbetrieb/ukw-referat/maps/), CC BY 4.0
+
+This code was developed by OE3ANC and is used at
+[Repeater page of ÖVSV]
+(https://repeater.oevsv.at/list).
+
+
+Using and editing data from the [VHF department of the ÖVSV DV](https://www.oevsv.at/funkbetrieb/ukw-referat/maps/), CC BY 4.0
 
 Thanks for providing the open data!
 
