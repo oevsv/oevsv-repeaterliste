@@ -144,7 +144,7 @@
   
   onMount(async () => {
     try {
-      const response = await fetch('https://repeater.oevsv.at/api/trx');
+      const response = await fetch('/api/trx');
       repeaters = await response.json();
     } catch (error) {
       console.error('Error fetching repeater data:', error);
