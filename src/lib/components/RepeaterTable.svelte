@@ -24,6 +24,7 @@
     tetra: boolean;
     other_mode: boolean;
     other_mode_name: string;
+    echolink_id: number;
   }
 
   // State declarations
@@ -241,6 +242,7 @@
           <th onclick={() => handleSort('ctcss_rx')}>CTCSS RX</th>
           <th onclick={() => handleSort('site_name')}>Standort</th>
           <th>Modi</th>
+          <th>Echolink</th>
         </tr>
       </thead>
       <tbody>
@@ -264,6 +266,7 @@
                 repeater.other_mode && repeater.other_mode_name
               ].filter(Boolean).join(', ')}
             </td>
+            <td>{repeater.echolink_id}</td>
           </tr>
         {/each}
       </tbody>
