@@ -91,6 +91,7 @@
         ...(repeaters.filter(r => r.c4fm).map(() => 'C4FM')),
         ...(repeaters.filter(r => r.dstar).map(() => 'D-STAR')),
         ...(repeaters.filter(r => r.tetra).map(() => 'TETRA')),
+        ...(repeaters.filter(r => r.echolink_id).map(() => 'ECHOLINK')),
         ...(repeaters.filter(r => r.other_mode && r.other_mode_name)
             .map(r => r.other_mode_name))
       ])
@@ -123,6 +124,7 @@
               case 'C4FM': return repeater.c4fm;
               case 'D-STAR': return repeater.dstar;
               case 'TETRA': return repeater.tetra;
+              case 'ECHOLINK': return repeater.echolink_id;
               default: return repeater.other_mode_name === mode;
             }
           });
