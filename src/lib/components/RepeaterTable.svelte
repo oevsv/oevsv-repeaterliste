@@ -24,6 +24,7 @@
     tetra: boolean;
     other_mode: boolean;
     other_mode_name: string;
+    echolink_id: number;
   }
 
   // State declarations
@@ -90,6 +91,7 @@
         ...(repeaters.filter(r => r.c4fm).map(() => 'C4FM')),
         ...(repeaters.filter(r => r.dstar).map(() => 'D-STAR')),
         ...(repeaters.filter(r => r.tetra).map(() => 'TETRA')),
+        ...(repeaters.filter(r => r.echolink_id).map(() => 'ECHOLINK')),
         ...(repeaters.filter(r => r.other_mode && r.other_mode_name)
             .map(r => r.other_mode_name))
       ])
@@ -122,6 +124,7 @@
               case 'C4FM': return repeater.c4fm;
               case 'D-STAR': return repeater.dstar;
               case 'TETRA': return repeater.tetra;
+              case 'ECHOLINK': return repeater.echolink_id;
               default: return repeater.other_mode_name === mode;
             }
           });
@@ -241,6 +244,7 @@
           <th onclick={() => handleSort('ctcss_rx')}>CTCSS RX</th>
           <th onclick={() => handleSort('site_name')}>Standort</th>
           <th>Modi</th>
+          <th>Echolink</th>
         </tr>
       </thead>
       <tbody>
@@ -264,6 +268,7 @@
                 repeater.other_mode && repeater.other_mode_name
               ].filter(Boolean).join(', ')}
             </td>
+            <td>{repeater.echolink_id}</td>
           </tr>
         {/each}
       </tbody>
